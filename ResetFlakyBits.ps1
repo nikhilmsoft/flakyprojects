@@ -58,7 +58,7 @@ $basicAuth = [System.Text.Encoding]::UTF8.GetBytes($basicAuth)
 $basicAuth = [System.Convert]::ToBase64String($basicAuth)
 $headers = @{Authorization=("Basic {0}" -f $basicAuth)} + @{"Accept"="application/json;api-version=2.1-preview.2"}
 
-$Url = "https://codedev.ms/$AccountName/$TeamProject/_apis/test/runs?buildUri=vstfs:///Build/Build/$BuildNumber"
+$Url = "https://dev.azure.com/$AccountName/$TeamProject/_apis/test/runs?buildUri=vstfs:///Build/Build/$BuildNumber"
 Write-Host "Querying total run with build number $BuildNumber"
 $response = Invoke-RestMethod -Uri $Url -headers $headers -ContentType 'application/json' -Method Get
 Write-Host "response: Total run count found with given build number is" $response.count
@@ -68,7 +68,7 @@ for($runCount = 0;$runCount -lt $response.count;$runCount++)
     $runModel = $response.value[$runCount]
     Write-Host "Processing Run Id :" $runModel.id
     
-    $RunUrl = "https://codedev.ms/$AccountName/$TeamProject/_apis/test/runs/"+$runModel.id
+    $RunUrl = "https://dev.azure.com/$AccountName/$TeamProject/_apis/test/runs/"+$runModel.id
     Write-Host "Getting branch Name for run id:" $runModel.id
     $runresponse = Invoke-RestMethod -Uri $RunUrl -headers $headers -ContentType 'application/json' -Method Get
     
@@ -82,7 +82,7 @@ for($runCount = 0;$runCount -lt $response.count;$runCount++)
     }
     Write-Host "branch name is" $branchName
 
-    $ResultUrl = "https://codedev.ms/$AccountName/$TeamProject/_apis/test/runs/"+$runModel.id+"/results"
+    $ResultUrl = "https://dev.azure.com/$AccountName/$TeamProject/_apis/test/runs/"+$runModel.id+"/results"
     Write-Host "Getting Results from Run Id:" $runModel.id ...
     $resultresponse = Invoke-RestMethod -Uri $ResultUrl -headers $headers -ContentType 'application/json' -Method Get
     
@@ -99,7 +99,7 @@ for($runCount = 0;$runCount -lt $response.count;$runCount++)
         Foreach ($flakyresult in $flakyresults) 
         {
          $jsonbody = '{ "flakyIdentifiers":[{"branchName":"'+$branchName+'","isFlaky": false}]}'
-         $FlakyUrl = "https://vstmr.codedev.ms/$AccountName/$TeamProject/_apis/testresults/results/ResultMetaData/"+$flakyresult.testCaseReferenceId+"?api-version=5.2-preview.3"
+         $FlakyUrl = "https://vstmr.dev.azure.com/$AccountName/$TeamProject/_apis/testresults/results/ResultMetaData/"+$flakyresult.testCaseReferenceId+"?api-version=5.2-preview.3"
          Write-Host "UnMarking Flaky Testcaseref id: " $flakyresult.testCaseReferenceId
          $FlakyResponse = Invoke-RestMethod -Uri $FlakyUrl -headers $headers -ContentType 'application/json' -Method Patch -Body $jsonbody
          Write-Host "Testcaseref id:" $FlakyResponse.testCaseReferenceId " is unmarked flaky"
