@@ -49,9 +49,10 @@ if ((-not $CollectionUri) -or (-not $TeamProject) -or (-not $AccessToken))
 }
 
 Write-Host "Parameters:"
-Write-Host "CollectionUri: $CollectionUri"
+Write-Host "AccountName: $AccountName"
 Write-Host "TeamProject: $TeamProject"
 Write-Host "AccessToken: $AccessToken"
+Write-Host "BuildNumber: $BuildNumber"
 
 $basicAuth = ("{0}:{1}" -f "dummy", $AccessToken)
 $basicAuth = [System.Text.Encoding]::UTF8.GetBytes($basicAuth)
@@ -107,4 +108,3 @@ for($runCount = 0;$runCount -lt $response.count;$runCount++)
     }
     
 }
-
