@@ -42,7 +42,7 @@ function Find-Flaky
     }
 }
 
-if ((-not $CollectionUri) -or (-not $TeamProject) -or (-not $AccessToken))
+if ((-not $AccountName) -or (-not $TeamProject) -or (-not $AccessToken) -or (-not $BuildNumber))
 {
    Write-UsageMessage
    throw "Incorrect arguments"
