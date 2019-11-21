@@ -7,4 +7,4 @@ Steps to reset the flaky status:
 
 .\ResetFlakyBits.ps1 -AccountName "<Account-Name>" -TeamProject "<Project-Name>" -AccessToken "<Pat token>" -BuildNumber "<Build-Id>" 
 
-5. Scripts will unmark flaky status and UnFlaky status will start reflecting from next build onwards. 
+5. Scripts will unmark flaky status and status will start reflecting from next build onwards. 
